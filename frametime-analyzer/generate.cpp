@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <iomanip>
 using namespace std;
 
 int main(){
     // Open the file (create if missing, WIPES if exists)
+    const double DROP_THRESHOLD_MS = 33.0;
     ofstream out("frames.csv");
     if (!out) {
         return 1;
@@ -19,16 +21,18 @@ int main(){
     // with the other distributions:
     uniform_int_distribution<int> pct(1, 100);
     uniform_real_distribution<double> spikeDist(40.0, 120.0); 
-    double ms;
-    out << "frame_id" << "," << "frame_ms" << "," << "dropped" << "," << "bytes_sent\n";
+
+    out << "frame_id,frame_ms,dropped,bytes_sent\n";
     for (int i = 0; i < 100000; i++){
+        double ms;
         int bytes = bytesDist(rng);
         if (pct(rng) <= 2){
             ms = spikeDist(rng);
         } else {
             ms = msDist(rng);
         }
-        out << i << "," << ms << "," << ((ms > 33.0) ? 1 : 0) << "," <<  bytes << "\n";
+        out << fixed << setprecision(2);
+        out << i << "," << ms << "," << ((ms > DROP_THRESHOLD_MS) ? 1 : 0) << "," <<  bytes << "\n";
     }
     cout << "wrote 100000 rows\n";
     return 0;
