@@ -1,6 +1,8 @@
+
 frames.csv
 a.out
 *.o
 *.dSYM/
 generate
 analyze
+garage
