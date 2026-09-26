@@ -36,17 +36,43 @@ Garage::Garage(const Garage& other){
     usedSpace = other.usedSpace;
  }
 
-bool Garage::park(Vehicle* vehicle) {
-    if (vehicle != nullptr) {
-        const size_t vehicleSpace = vehicle->spaceRequired();
-        if ( vehicleSpace + usedSpace <= capacity) {
-            vehicles.push_back(vehicle);
-            usedSpace += vehicleSpace;
-            return true;
-        }
-    }
-    return false;
+bool Garage::duplicateCheckForPlates(const std::string& plate) const{
+    return indexOf(plate) != -1;
 }
+
+// Always takes ownership of v. If it returns false, v has already been deleted: do not use it.
+bool Garage::park(Vehicle* v) {
+    if (v == nullptr){
+        return false;
+    }
+    if (indexOf(v->getPlate()) != -1) {
+        delete v;
+        return false;
+    }
+    const std::size_t space = v->spaceRequired();
+    if (usedSpace + space > capacity) {
+        delete v;
+        return false;
+    }
+    vehicles.push_back(v);
+    usedSpace += space;
+    return true;
+}
+
+bool Garage::removeByPlate(const std::string& plate){
+    int index = indexOf(plate);
+    if (index == -1){
+        return false;
+    } 
+    Vehicle* v = vehicles[static_cast<size_t>(index)];
+    size_t spaceOccupiedByVehicle = v->spaceRequired();
+    // object on heap is being destroyed, old address is there. 
+    delete v;
+    // need to remove the old address
+    vehicles.erase(vehicles.begin() + index);
+    usedSpace -= spaceOccupiedByVehicle;
+    return true;
+ }
 
 void Garage::list(std::ostream& os) const {
     for (Vehicle* v: vehicles) {
@@ -79,4 +105,22 @@ Garage& Garage::operator=(const Garage& other){
 
 std::size_t Garage::remainingSpace() const{
     return (capacity - usedSpace);
+}
+
+
+int Garage::indexOf(const std::string& plate) const{
+    for (std::size_t i = 0; i < vehicles.size(); i++){
+        if (vehicles[i]->getPlate() == plate) {
+            return static_cast<int>(i);
+        }
+    }
+    return -1;
+}
+
+const Vehicle* Garage::findByPlate(const std::string& plate) const {
+    int index = indexOf(plate);
+    if (index == -1){
+        return nullptr;
+    } 
+    return vehicles.at(static_cast<std::size_t>(index));
 }

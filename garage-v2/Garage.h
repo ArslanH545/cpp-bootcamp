@@ -12,6 +12,9 @@ class Garage {
         std::size_t usedSpace;
         void clear();
         void copyVehiclesForm(const Garage& other);
+        int indexOf(const std::string& plate) const;
+        bool duplicateCheckForPlates(const std::string& plate) const;
+
     public:
         Garage(const std::string& name, const std::size_t capacity);
         ~Garage();
@@ -21,5 +24,7 @@ class Garage {
         void list(std::ostream& os) const;
         Garage& operator=(const Garage& other);
         std::size_t remainingSpace() const;
+        const Vehicle* findByPlate(const std::string& plate) const;
+        bool removeByPlate(const std::string& plate);
 };
 #endif
