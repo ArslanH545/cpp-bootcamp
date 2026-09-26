@@ -1,8 +1,9 @@
-
 frames.csv
 a.out
 *.o
 *.dSYM/
 generate
 analyze
+m_leaks
+m
 garage
