@@ -21,11 +21,13 @@ int main() {
     #pragma clang diagnostic ignored "-Wself-assign-overloaded"
     b = b;   // 2. self-assignment
     #pragma clang diagnostic pop
-        std::cout << "after b=b: " << Vehicle::getCount() << '\n';     // 4
+    std::cout << "after b=b: " << Vehicle::getCount() << '\n';     // 4
 
     { Garage c = a; }   // 3. copy ctor, then c destroyed at }
     std::cout << "after scope: " << Vehicle::getCount() << '\n';   // 4
 
     cout << a << endl;  // 4. both valid, independent
     cout << b << endl;
+    cout << "remaining a: " << a.remainingSpace() << endl;
+    return 0;
 }

@@ -20,5 +20,6 @@ class Garage {
         bool park(Vehicle* vehicle);
         void list(std::ostream& os) const;
         Garage& operator=(const Garage& other);
+        std::size_t remainingSpace() const;
 };
 #endif

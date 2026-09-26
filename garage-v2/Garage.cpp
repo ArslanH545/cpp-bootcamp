@@ -76,3 +76,7 @@ Garage& Garage::operator=(const Garage& other){
     // 5. return *this
     return *this;
 }
+
+std::size_t Garage::remainingSpace() const{
+    return (capacity - usedSpace);
+}
