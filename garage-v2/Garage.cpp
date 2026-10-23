@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Garage.h"
 #include "Vehicle.h"
-
+#include "sorting.h"
 
 void Garage::clear(){
     for (Vehicle* v: vehicles){
@@ -123,4 +123,12 @@ const Vehicle* Garage::findByPlate(const std::string& plate) const {
         return nullptr;
     } 
     return vehicles.at(static_cast<std::size_t>(index));
+}
+
+
+
+void Garage::sortedByPlate(){
+    insertionSort(vehicles, [](const Vehicle *v1, const Vehicle *v2) {
+        return v1->getPlate() < v2->getPlate();
+    });
 }

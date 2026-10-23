@@ -2,6 +2,7 @@
 #define GARAGE_H
 #include <vector>
 #include "Vehicle.h"
+#include "sorting.h"
 class Garage {
     friend std::ostream& operator<<(std::ostream& os, const Garage& g);
     private:
@@ -26,5 +27,6 @@ class Garage {
         std::size_t remainingSpace() const;
         const Vehicle* findByPlate(const std::string& plate) const;
         bool removeByPlate(const std::string& plate);
+        void sortedByPlate();
 };
 #endif
