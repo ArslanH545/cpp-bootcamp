@@ -2,6 +2,8 @@
 #include "Garage.h"
 #include "Vehicle.h"
 #include "sorting.h"
+#include "VehicleFactor.h"
+#include <fstream>
 
 void Garage::clear(){
     usedSpace = 0;
@@ -132,4 +134,36 @@ std::size_t Garage::getUsedspace() const{
 
 std::size_t Garage::getCapacity() const{
     return capacity;
+}
+
+bool Garage::saveToFile(const std::string& path) const { 
+    std::ofstream out(path);
+    if (!out){
+        return false;
+    } 
+    for (size_t i = 0; i < vehicles.size(); i++){
+        vehicles[i]->save(out);
+    }
+    return true;
+}
+
+LoadFileResult Garage::loadFromFile(const std::string& path){
+    LoadFileResult result{false, 0, {}};
+    std::ifstream in(path);
+    if (!in) {
+        return result;
+    }
+    result.opened = true;
+    std::string line;
+    while (std::getline(in, line)){
+        Vehicle* v = parseVehicle(line);
+        if (v == nullptr) {
+            result.rejected.push_back(line);
+        } else if (park(v)) {
+            result.load ++;
+        } else {
+            result.rejected.push_back(line);
+        }
+    }   
+    return result;
 }

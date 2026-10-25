@@ -3,6 +3,7 @@
 #define VEHICLE_H
 #include <string>
 #include <iostream>
+#include <vector> 
 class Vehicle {
     friend std::ostream& operator<<(std::ostream& os, const Vehicle& v);
     private:
@@ -24,7 +25,8 @@ class Vehicle {
         const std::string& getModel() const;
         int getYear() const;
         // runtime polymorphism // pure virtual function.
-        virtual void describe(std::ostream& os) const = 0;    
+        virtual void describe(std::ostream& os) const = 0;  
+        virtual void save(std::ostream& os) const = 0;  
         // count the Total vehicle, it does not belong to specifc object rather it belong entire Vehicle class.   
         static int getCount();
         // how much space is avaible for each Vehcile type in garage. 

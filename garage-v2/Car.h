@@ -13,8 +13,6 @@ class Car : public Vehicle{
         int getNumofDoors() const;
         size_t spaceRequired() const override;
         Car* clone() const override;
+        void save(std::ostream& os) const override;
 };
 #endif
-
-
-

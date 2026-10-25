@@ -21,3 +21,7 @@ size_t Truck::spaceRequired() const {
 Truck* Truck::clone() const {
     return new Truck(*this);
 } 
+
+void Truck::save(std::ostream& os) const {
+os << "TRUCK," << getPlate() << ',' << getCompanyName() << "," << getModel() << "," << getYear() << "," << payloadTons << '\n';
+}

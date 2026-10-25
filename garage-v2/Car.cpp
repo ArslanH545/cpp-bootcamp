@@ -10,12 +10,16 @@ void Car::describe(std::ostream& os) const {
 
 int Car::getNumofDoors() const{
     return numOfDoors;
- }
+}
 
 size_t Car::spaceRequired() const {
     return 2;
- }
+}
 
- Car* Car::clone() const {
+Car* Car::clone() const {
     return new Car(*this);
- }
+}
+
+void Car::save(std::ostream& os) const {
+os << "CAR," << getPlate() << ',' << getCompanyName() << "," << getModel() << "," << getYear() << "," << numOfDoors << '\n';
+}

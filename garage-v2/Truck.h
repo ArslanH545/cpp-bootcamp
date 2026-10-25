@@ -12,5 +12,6 @@ class Truck : public Vehicle{
         double getPayloadTons() const;
         size_t spaceRequired() const override;
         Truck* clone() const override;
+        void save(std::ostream& os) const override;
 };
 #endif

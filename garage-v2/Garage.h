@@ -3,6 +3,13 @@
 #include <vector>
 #include "Vehicle.h"
 #include "sorting.h"
+
+struct LoadFileResult {
+    bool opened;
+    int load;
+    std::vector<std::string> rejected;
+};
+
 class Garage {
     friend std::ostream& operator<<(std::ostream& os, const Garage& g);
     private:
@@ -28,5 +35,8 @@ class Garage {
         const Vehicle* findByPlate(const std::string& plate) const;
         bool removeByPlate(const std::string& plate);
         void sortedByPlate();
+        bool saveToFile(const std::string& path) const;
+        LoadFileResult loadFromFile(const std::string& path);  
 };
+
 #endif

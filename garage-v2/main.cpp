@@ -7,15 +7,16 @@
 #include <vector>
 #include <limits>
 #include <stdexcept>
-
+#include "VehicleFactor.h"
 using namespace std;
 
 void printMenu();
 int readInt(const string &prompt);
 double readDouble(const string& prompt);
 Vehicle* enterVehicleInput();
-void toLowercase(string &s);
 void readVehicleDetails(string& plate, string& companyName, string& model, int& year);
+
+const std::string kSaveFile = "garage.txt";   
 
 int main() {
     Garage g("Main", 10);
@@ -89,8 +90,41 @@ int main() {
                 break;
             }
 
-            default:
+            case 7: {
+                if (g.saveToFile(kSaveFile)) {
+                   cout << "Saved to " << kSaveFile << '\n';
+                } else {
+                        cout << "Could not open " << kSaveFile << '\n';                
+                }
+                cout << endl;
+                break;
+            }   
+
+            case 8: {
+                LoadFileResult result = g.loadFromFile(kSaveFile);
+                if (result.opened) {
+                    cout << "Successfully Load: " << result.load << endl;
+                    if (!result.rejected.empty()) {
+                        cout << "Rejected Line Press r: ";
+                        string r;
+                        cin >> r;
+                        if (r == "r"){
+                            for (string& s: result.rejected){
+                                cout << s << endl;
+                            }
+                        }
+                    }
+                } else {
+                    cout << kSaveFile <<  " not Found!" << endl;
+                }
+                cout << endl;
+                break;
+            }
+                
+
+            default: {
                 cout << "Unknown option" << endl;
+            }
         }
     }
     return 0;
@@ -104,6 +138,8 @@ void printMenu(){
     cout << "4. List" << endl;
     cout << "5. Sort by plate" << endl;
     cout << "6. Remaining space" << endl;
+    cout << "7. Print vehicles on separate file" << endl;
+    cout << "8. Load input csv file" << endl;
     cout << "0. Quit" << endl;
 }
 
@@ -150,13 +186,6 @@ double readDouble(const string& prompt) {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         cout << "Invalid number, try again.\n";
-    }
-}
-
-
-void toLowercase(string &s){
-    for (char& c: s){
-        c = tolower(c);
     }
 }
 

@@ -20,4 +20,8 @@ size_t Motorcycle::spaceRequired() const {
 
 Motorcycle* Motorcycle::clone() const{
     return new Motorcycle(*this);
- }
+}
+
+void Motorcycle::save(std::ostream& os) const {
+os << "MOTORCYCLE," << getPlate() << ',' << getCompanyName() << "," << getModel() << "," << getYear() << "," << sidecar << '\n';
+}

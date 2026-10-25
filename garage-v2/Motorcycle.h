@@ -13,6 +13,7 @@ class Motorcycle : public Vehicle {
         bool hasSideCar() const;
         size_t spaceRequired() const override;
         Motorcycle* clone() const override;
+        void save(std::ostream& os) const override;
 };
 #endif  
 
