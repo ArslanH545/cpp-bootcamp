@@ -4,13 +4,11 @@
 #include "sorting.h"
 
 void Garage::clear(){
+    usedSpace = 0;
     for (Vehicle* v: vehicles){
         delete v;
     }
-    // following vechile clear , 
-    // while(!vehicles.empty()){
-    //     vehicles.pop_back();
-    // }
+     // drops all the (now dangling) pointers; size() becomes 0, capacity() unchanged
     vehicles.clear();
 }
 
@@ -29,16 +27,10 @@ Garage::~Garage(){
     clear();
 }
 
-Garage::Garage(const Garage& other){
-    name = other.name;
-    copyVehiclesForm(other);
-    capacity = other.capacity;
+Garage::Garage(const Garage& other) : name(other.name), capacity(other.capacity), usedSpace(other.usedSpace){
     usedSpace = other.usedSpace;
  }
 
-bool Garage::duplicateCheckForPlates(const std::string& plate) const{
-    return indexOf(plate) != -1;
-}
 
 // Always takes ownership of v. If it returns false, v has already been deleted: do not use it.
 bool Garage::park(Vehicle* v) {
@@ -131,4 +123,13 @@ void Garage::sortedByPlate(){
     insertionSort(vehicles, [](const Vehicle *v1, const Vehicle *v2) {
         return v1->getPlate() < v2->getPlate();
     });
+}
+
+
+std::size_t Garage::getUsedspace() const{
+    return usedSpace;
+}
+
+std::size_t Garage::getCapacity() const{
+    return capacity;
 }
