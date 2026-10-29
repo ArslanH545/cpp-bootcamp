@@ -29,10 +29,11 @@ Garage::~Garage(){
     clear();
 }
 
-Garage::Garage(const Garage& other) : name(other.name), capacity(other.capacity), usedSpace(other.usedSpace){
-    usedSpace = other.usedSpace;
- }
-
+Garage::Garage(const Garage& other)
+    : name(other.name), capacity(other.capacity), usedSpace(other.usedSpace)
+{
+    copyVehiclesForm(other);
+}
 
 // Always takes ownership of v. If it returns false, v has already been deleted: do not use it.
 bool Garage::park(Vehicle* v) {
