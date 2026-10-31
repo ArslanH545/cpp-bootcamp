@@ -16,9 +16,19 @@ class List {
         Node* tail;
         void clear();
     public:
+        class Iterator {
+            private: 
+                Node* current;
+            public:
+                Iterator(Node* add);
+                T& operator *(); // Access current node's data
+                Iterator& operator++(); // Move to the next node
+                bool operator!=(const Iterator& other); // Compare with another iterator
+        };
         List();
         ~List();
         List(const List<T>& other);
+        List<T>& operator=(const List<T>& other);
         size_t getSize() const;
         void front_push(const T& value);
         void back_push(const T& value);
@@ -28,10 +38,30 @@ class List {
         size_t search(const T& value) const;
         bool empty() const;
         void printLL();
+        Iterator begin();
+        Iterator end();
 };
+// Iterator method body
+template<typename T>
+List<T>::Iterator::Iterator(Node* add) : current(add) {}
 
-#endif
+template<typename T>
+T& List<T>::Iterator::operator*() {
+    return current->data;
+}
 
+template<typename T>
+typename List<T>::Iterator& List<T>::Iterator::operator++(){
+    current = current->next;
+    return *this;
+}
+
+template<typename T>
+bool List<T>::Iterator::operator!=(const List<T>::Iterator& other){
+    return current != other.current;
+}
+
+// Lists methods along Deffination. 
 
 template<typename T> 
 void List<T>::clear() {
@@ -43,7 +73,6 @@ void List<T>::clear() {
     size = 0;
 }
 
-// Deffination of methods. 
 template<typename T>
 List<T>::List() : size(0), head(nullptr), tail(nullptr) {}
 
@@ -64,6 +93,19 @@ List<T>::List(const List<T>& other): size(0), head(nullptr), tail(nullptr) {
         cur = cur->next;
     }
 }
+//  copy assignment operator
+template<typename T>
+List<T>& List<T>::operator=(const List<T>& other) {
+    if (this == &other) return *this;   // b = b
+    clear();                            // free my old nodes
+    Node* cur = other.head;
+    while (cur != nullptr) {
+        back_push(cur->data);
+        cur = cur->next;
+    }
+    return *this;
+}
+
 
 template<typename T>
 void List<T>::front_push(const T& value) {
@@ -97,7 +139,9 @@ void List<T>::pop_front(){
     } 
     Node* temp = head;
     head = head->next;
-    temp->next =  nullptr;
+    if (head == nullptr) {
+        tail = nullptr;
+    }
     delete temp;
     size--;
 }
@@ -108,6 +152,12 @@ void List<T>::pop_back() {
         return;
     }
     Node* temp = head;
+    if (size == 1) {
+        head = tail = nullptr;
+        delete temp;
+        size --;
+        return;
+    }
     while (temp->next != tail){
         temp = temp->next;
     }    
@@ -124,13 +174,14 @@ void List<T>::insert(const T& value, const size_t pos) {
     } 
     if (pos == 0) {
         front_push(value);
+        return;
     }
-
+    if (pos == size) {
+        back_push(value);
+        return;
+    }
     Node* temp = head; 
-    for (size_t i = 0; i < size - 1; i++){
-        if (temp == nullptr){
-            return;
-        }
+    for (size_t i = 0; i < pos - 1; i++){
         temp = temp->next;
     }
     Node* newNode = new Node(value);
@@ -142,9 +193,9 @@ void List<T>::insert(const T& value, const size_t pos) {
 template<typename T>
 size_t List<T>::search(const T& value) const{
     Node* temp = head;
-    size_t idx;
+    size_t idx = 0;
     while(temp != nullptr){
-        if (temp->date == value) {
+        if (temp->data == value) {
             return idx;
         }
         temp = temp->next;
@@ -172,3 +223,14 @@ void List<T>::printLL(){
     }
     std::cout << "->NULL\n";
 }   
+
+template<typename T>
+typename List<T>::Iterator List<T>::begin() {
+    return Iterator(head);
+}
+
+template<typename T>
+typename List<T>::Iterator List<T>::end() {
+    return Iterator(nullptr);
+}
+#endif
