@@ -38,6 +38,7 @@ class List {
         size_t search(const T& value) const;
         bool empty() const;
         void printLL();
+        T& front() const;
         Iterator begin();
         Iterator end();
 };
@@ -232,5 +233,10 @@ typename List<T>::Iterator List<T>::begin() {
 template<typename T>
 typename List<T>::Iterator List<T>::end() {
     return Iterator(nullptr);
+}
+
+template<typename T>
+T& List<T>::front() const {
+    return head->data;
 }
 #endif
